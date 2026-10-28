@@ -31,10 +31,15 @@ router.put("/:id", asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id).select("+password");
   if (!user) return res.status(404).json({ message: "User not found." });
 
-  const { name, email, password, role, isActive } = req.body;
+  const { name, email, password, currentPassword, role, isActive } = req.body;
   if (name !== undefined) user.name = name;
   if (email !== undefined) user.email = email;
-  if (password) user.password = password; // hashed by the pre-save hook
+  if (password) {
+    // Changing your own password requires the current one.
+    if (isSelf(req) && (!currentPassword || !(await user.matchPassword(currentPassword))))
+      return res.status(400).json({ message: "Current password is incorrect." });
+    user.password = password; // hashed by the pre-save hook
+  }
 
   if (req.user.role === "admin") {
     if (isSelf(req) && ((role && role !== "admin") || isActive === false))

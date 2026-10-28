@@ -7,7 +7,7 @@ const { protect } = require("../middleware/auth");
 const router = express.Router();
 router.use(protect);
 
-const FIELDS = ["name", "phone", "email", "address", "category", "isFavorite", "notes"];
+const FIELDS = ["name", "phone", "email", "address", "category", "isFavorite", "notes", "photo"];
 const pick = (body) => Object.fromEntries(FIELDS.filter((k) => k in body).map((k) => [k, body[k]]));
 
 const checkCategory = async (data) => {

@@ -39,3 +39,9 @@ Default admin (from .env): admin@example.com / admin123. Change it.
 Rules enforced: passwords hashed with bcrypt; users can only touch their own contacts;
 only admins can change roles or deactivate users; categories in use can't be deleted;
 admins can't delete, demote, or deactivate themselves; deleting a user removes their contacts.
+
+## Added in v2
+- Contacts accept an optional `photo` (small JPEG/PNG/WebP data URL, about 200 KB max).
+- `GET /api/categories` includes `contactCount` for admins.
+- Changing your own password via `PUT /api/users/:id` requires `currentPassword`.
+- JSON body limit raised to 1 MB for photos.

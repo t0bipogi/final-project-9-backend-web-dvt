@@ -11,6 +11,7 @@ exports.errorHandler = (err, req, res, _next) => {
     const label = field === "email" ? "Email" : field === "name" ? "Category" : "Value";
     return res.status(400).json({ message: `${label} is already in use.` });
   }
+  if (err.type === "entity.too.large") return res.status(413).json({ message: "That upload is too large." });
   if (err.name === "CastError") return res.status(400).json({ message: "Invalid id." });
 
   console.error(err);
